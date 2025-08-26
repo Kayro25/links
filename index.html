@@ -9,6 +9,8 @@
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow-x: hidden; }
+
   body {
     background:
       linear-gradient(0deg, #001100 1px, transparent 1px),
@@ -23,7 +25,6 @@
     min-height: 100vh;
     padding: 2rem 1rem 4rem;
     filter: contrast(1.1) brightness(1.1);
-    overflow-x: hidden;
   }
 
   body::before {
@@ -44,14 +45,15 @@
 
   h1 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 5rem;
-    margin-bottom: 2rem;
+    font-size: clamp(3rem, 12vw, 6rem);
+    margin-bottom: 2.5rem;
     color: #2eff77;
     text-align: center;
     text-shadow: 0 0 8px #2eff77, 0 0 15px #2eff77, 0 0 25px #1ed760, 2px 2px 2px #000;
     z-index: 1;
+    opacity: 1;
     white-space: nowrap;
-    opacity: 1; /* inicialmente visível */
+    max-width: calc(100% - 2rem);
   }
 
   #links {
@@ -61,11 +63,29 @@
     align-items: center;
     width: 100%;
     max-width: 400px;
-    z-index: 1;
     list-style: none;
-    padding: 0;
+    padding: 0 1rem;
     margin: 0 auto;
   }
+  .link-box { width: 100%; }
+  .link-box a {
+    color: #2ecc40;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 0;
+    border: 2px solid #2ecc40;
+    border-radius: 4px;
+    box-shadow: 0 0 5px #2ecc40;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+  }
+  .link-box a:hover { background-color: #2ecc40; color: #000; box-shadow: 0 0 12px #27ae60; }
 
   #carousels {
     display: flex;
@@ -73,55 +93,20 @@
     gap: 1.5rem;
     align-items: center;
     width: 100%;
-    max-width: 400px;
-    z-index: 1;
+    max-width: 500px;
     margin-top: 2rem;
+    padding: 0 1rem;
   }
-
-  .link-box, .carousel-box, #info-box {
-    background: #0c0c14;
-    border: 1.5px solid #2ecc40;
-    padding: 1rem;
-    border-radius: 6px;
-    text-align: center;
-    width: 100%;
-  }
-
-  #info-box {
-    margin-top: 2rem;
-  }
-
-  .link-box a {
-    color: #2ecc40;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0;
-    border: 2px solid #2ecc40;
-    border-radius: 4px;
-    box-shadow: 0 0 5px #2ecc40;
-    transition: all 0.3s ease;
-  }
-
-  .link-box a:hover {
-    background-color: #2ecc40;
-    color: #000;
-    box-shadow: 0 0 12px #27ae60;
-  }
-
+  .carousel-box { display: flex; flex-direction: column; gap: 0.8rem; width: 100%; }
   .carousel {
     position: relative;
     width: 100%;
-    height: 180px;
+    height: 0;
+    padding-top: 60%;
     overflow: hidden;
     border: 2px solid #2ecc40;
     border-radius: 4px;
   }
-
   .carousel img {
     position: absolute;
     width: 100%;
@@ -130,14 +115,27 @@
     top: 0;
     left: 100%;
     transition: left 0.5s ease-in-out;
+    pointer-events: none;
+    user-select: none;
   }
-
   .carousel img:first-child { left: 0; }
+
+  #info-box {
+    margin-top: 2rem;
+    background: #0c0c14;
+    border: 1.5px solid #2ecc40;
+    padding: 1.5rem;
+    border-radius: 6px;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+  }
 
   footer {
     margin-top: 2rem;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 2.5vw, 0.85rem);
     color: #0f4d0f;
     text-align: center;
     padding: 1rem 1rem 0;
@@ -145,44 +143,112 @@
     border-top: 1px dotted #2ecc40;
     width: 100%;
     max-width: 1200px;
-    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  footer pre { margin: 0; padding: 0; white-space: pre-wrap; word-break: break-word; }
+
+  /* Frete e botão de compra */
+  .frete-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1rem;
   }
 
-  @media (max-width: 600px) {
-    h1 { font-size: 3.2rem; }
-    .carousel { height: 160px; }
-    .link-box a { font-size: 1rem; }
+  .frete-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: nowrap; /* mantém em linha */
+    width: 100%;
+  }
+
+  .frete-box input {
+    flex: 1; /* ocupa o máximo de espaço */
+    border: 1px solid #2ecc40;
+    padding: 0.1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    border-radius: 6px;
+    background: #000;
+    color: #2ecc40;
+    font-weight: bold;
+    box-shadow: 0 0 6px #2ecc40, 0 0 12px #2ecc40;
+    transition: all 0.3s ease;
+  }
+
+  .frete-row button {
+    flex: 0 0 auto; /* mantém tamanho do conteúdo */
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 2px solid #2ecc40;
+    background: #000;
+    color: #2ecc40;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 6px #2ecc40, 0 0 12px #2ecc40;
+    transition: all 0.3s ease;
+  }
+
+  .frete-box button:hover,
+  #btn-buy-camisa1:hover {
+    background-color: #2ecc40;
+    color: #000;
+    box-shadow: 0 0 12px #27ae60;
+  }
+
+  #btn-buy-camisa1 {
+    width: 100%;
+    margin-top: 0.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    border: 2px solid #2ecc40;
+    background: #000;
+    color: #2ecc40;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 6px #2ecc40, 0 0 12px #2ecc40;
+    transition: all 0.3s ease;
   }
 </style>
+
 </head>
 <body>
+
 <h1 id="title">Sorrizos</h1>
 
-<!-- LINKS -->
 <ul id="links">
-  <li class="link-box">
-    <a href="https://instagram.com/sorrizos.com.br" target="_blank">📸 Instagram</a>
-  </li>
-  <li class="link-box">
-    <a href="https://tiktok.com/@sorrizos.com.br" target="_blank">▶️ TikTok</a>
-  </li>
+  <li class="link-box"><a href="https://instagram.com/sorrizos.com.br" target="_blank">📸 Instagram</a></li>
+  <li class="link-box"><a href="https://tiktok.com/@sorrizos.com.br" target="_blank">▶️ TikTok</a></li>
 </ul>
 
-<!-- CARROSSEIS DE ROUPAS -->
 <div id="carousels">
   <div class="carousel-box">
     <div class="carousel">
-      <img src="imagens/camisa1.jpg" alt="Camisa 1">
-      <img src="imagens/camisa2.jpg" alt="Camisa 2">
-      <img src="imagens/camisa3.jpg" alt="Camisa 3">
+      <img src="imagens/camisa1.jpg" alt="Camisa 1" draggable="false">
+      <img src="imagens/camisa2.jpg" alt="Camisa 2" draggable="false">
+      <img src="imagens/camisa3.jpg" alt="Camisa 3" draggable="false">
     </div>
+
+    <div class="frete-box">
+      <div class="frete-row">
+        <input type="text" id="frete-input" placeholder="Digite seu CEP">
+        <button id="btn-calc-frete">Calcular Frete</button>
+      </div>
+      <p id="frete-info" style="margin-top:0.5rem;">Frete: R$ 0,00</p>
+      <button id="btn-buy-camisa1">🛒 Comprar</button>
+    </div>
+
   </div>
 </div>
 
-<!-- INFORMAÇÕES SOBRE PEDIDOS -->
 <div id="info-box">
   <p style="margin:0; text-align:center;">
-    Todos os pedidos são feitos sob encomenda via DM no Instagram.<br>
+    Todos os pedidos são feitos sob encomenda.<br>
     Política de trocas: trocas só serão aceitas em caso de defeito ou erro no pedido.
   </p>
 </div>
@@ -197,6 +263,7 @@
 </footer>
 
 <script>
+// Carrossel
 const carousels = document.querySelectorAll('.carousel');
 carousels.forEach(carousel => {
   const images = carousel.querySelectorAll('img');
@@ -211,34 +278,80 @@ carousels.forEach(carousel => {
   }, 5000);
 });
 
-// neon falhando estilo cinema
+// Neon flicker
 const title = document.getElementById('title');
-
 function flicker() {
-  // número de flickers curtos durante este ciclo
-  const flicks = Math.floor(Math.random() * 3); // 0 a 2 flicks curtos
+  const flicks = Math.floor(Math.random() * 3);
   for (let i = 0; i < flicks; i++) {
-    const delay = Math.random() * 800; // quando ocorre o flick
+    const delay = Math.random() * 800;
     setTimeout(() => {
       title.style.opacity = 0.2 + Math.random() * 0.5;
       setTimeout(() => title.style.opacity = 1, 100 + Math.random() * 100);
     }, delay);
   }
-
-  // piscada principal maior
-  const mainDelay = 1000 + Math.random() * 1000; // piscada dura 1 a 2s
+  const mainDelay = 1000 + Math.random() * 1000;
   setTimeout(() => {
     title.style.opacity = 0.1 + Math.random() * 0.5;
     setTimeout(() => title.style.opacity = 1, mainDelay);
   }, 0);
-
-  // próxima piscada entre 4 e 10 segundos
   const next = 4000 + Math.random() * 6000;
   setTimeout(flicker, next);
 }
-
-// iniciar
 setTimeout(flicker, 2000);
+
+let freteValor = 0;
+const freteInput = document.getElementById('frete-input');
+const freteInfo = document.getElementById('frete-info');
+const btnCalcFrete = document.getElementById('btn-calc-frete');
+
+btnCalcFrete.addEventListener('click', async () => {
+  const cep = freteInput.value.trim();
+  if (!cep) return alert('Digite seu CEP');
+
+  try {
+    const res = await fetch('https://seu-backend.com/frete/calcular', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cep_destino: cep, peso: 0.3, altura: 2, largura: 25, profundidade: 20 })
+    });
+    const data = await res.json();
+    if (data.length > 0) {
+      freteValor = data[0].cost || 0;
+      freteInfo.textContent = `Frete: R$ ${freteValor.toFixed(2)}`;
+    } else {
+      alert('Não foi possível calcular o frete');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao calcular frete');
+  }
+});
+
+// Compra segura via backend Mercado Pago
+const buyBtn = document.getElementById('btn-buy-camisa1');
+buyBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  if (freteValor === 0) return alert('Calcule o frete antes de comprar');
+
+  try {
+    const res = await fetch('https://seu-backend.com/checkout/create_preference', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        produto: "camisa1",
+        quantidade: 1,
+        frete: { preco: freteValor, metodo: "PAC" }
+      })
+    });
+    const data = await res.json();
+    if (data.init_point) window.location.href = data.init_point;
+    else alert("Erro ao iniciar pagamento");
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao conectar com o servidor");
+  }
+});
 </script>
+
 </body>
 </html>
